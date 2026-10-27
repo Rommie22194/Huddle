@@ -3,7 +3,7 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 
 // In development, forward /api requests to the Express server.
-// In production, vercel.json does the same forwarding to the deployed API.
+// In production, Express serves the built app and the API from the same server.
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {

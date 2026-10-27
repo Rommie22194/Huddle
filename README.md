@@ -4,8 +4,9 @@
 
 | | |
 |---|---|
-| **Live Demo** | `https://<your-project>.vercel.app` (ใส่หลัง deploy) |
-| **API** | `https://<your-api>.onrender.com/api/health` |
+| **Live Demo** | https://huddle-murn.onrender.com |
+| **API health** | https://huddle-murn.onrender.com/api/health |
+| **GitHub** | https://github.com/Rommie22194/Huddle |
 | **Figma** | `<ลิงก์ Figma>` |
 | **Video** | `<ลิงก์ YouTube Unlisted>` |
 
@@ -42,7 +43,7 @@
 | Auth | JWT (jsonwebtoken) + bcryptjs + httpOnly cookie | ปลอดภัยกว่าเก็บ token ใน localStorage |
 | Validation | Zod | ใช้ schema เดียวตรวจข้อมูลทุก request |
 | Security | Helmet | ตั้ง security headers ให้อัตโนมัติ |
-| Hosting | Vercel (frontend) + Render (backend) + Neon (PostgreSQL) | ฟรีทั้งหมด, deploy อัตโนมัติเมื่อ push GitHub |
+| Hosting | Render (เว็บ + API) + Supabase (PostgreSQL) | ฟรีทั้งหมด, Render deploy อัตโนมัติเมื่อ push GitHub |
 
 ## Project Structure
 
@@ -54,7 +55,6 @@ client/                    # Frontend (React + Vite)
     context/               # AuthProvider (เก็บสถานะ login)
     lib/api.js             # fetch helper + ฟังก์ชันจัดการวันเวลา
   vite.config.js           # proxy /api -> http://localhost:4000 ตอน dev
-  vercel.json              # proxy /api -> Render ตอน production
 server/                    # Backend (Express)
   prisma/
     schema.prisma          # Database schema (User, Room, Booking)
@@ -130,28 +130,34 @@ npm run dev
 
 ## Deploy
 
-### 1) Database – Neon
-สมัคร [neon.tech](https://neon.tech) → Create project → คัดลอก connection string
+ระบบจริงใช้ **Render (เว็บ + API ใน service เดียว)** และ **Supabase (PostgreSQL)** ทั้งคู่ region Singapore แพ็กเกจฟรี
 
-### 2) Backend – Render
-1. [render.com](https://render.com) → New → **Web Service** → เลือก repo นี้
-2. ตั้งค่า:
-   - Root Directory: `server`
-   - Build Command: `npm install && npm run build`
-   - Start Command: `npm start`
-3. Environment Variables:
-   - `DATABASE_URL` = connection string จาก Neon
-   - `JWT_SECRET` = ข้อความสุ่มยาว ๆ
-   - `NODE_ENV` = `production`
-4. Deploy → เปิด `https://<your-api>.onrender.com/api/health` ต้องเห็น `{"status":"ok"}`
-5. ใส่ข้อมูลตัวอย่าง 1 ครั้ง: ในหน้า service ของ Render → **Shell** → รัน `npx prisma db seed`
+```
+Browser ──HTTPS──> Render web service "huddle"
+                   ├─ Express serves the React build (client/dist)
+                   └─ /api/*  ──Prisma──> Supabase Postgres (session pooler)
+```
 
-### 3) Frontend – Vercel
-1. แก้ `client/vercel.json` เปลี่ยน `YOUR-API.onrender.com` เป็น URL ของ Render แล้ว push
-2. [vercel.com](https://vercel.com) → Add New Project → เลือก repo → Root Directory: `client` (Framework: Vite)
-3. Deploy เสร็จ เปิดเว็บและ login ด้วย test account ได้เลย
+เว็บกับ API อยู่โดเมนเดียวกัน cookie login จึงใช้ได้โดยไม่ต้องตั้ง CORS
 
-> Vercel จะส่งต่อทุก request ที่ขึ้นต้นด้วย `/api` ไปที่ Render ทำให้เบราว์เซอร์มองว่าเป็นเว็บเดียวกัน cookie login จึงใช้งานได้ ไม่ต้องตั้ง CORS
+### 1) Database – Supabase
+1. สร้าง project ที่ [supabase.com](https://supabase.com) (region Singapore)
+2. สร้าง user สำหรับแอป ใน SQL Editor:
+   ```sql
+   create role huddle_app with login password '<strong-password>';
+   grant usage, create on schema public to huddle_app;
+   ```
+3. Connection string (Session pooler, IPv4 – Render ใช้ IPv6 ไม่ได้):
+   `postgresql://huddle_app.<project-ref>:<password>@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres?schema=public`
+
+### 2) Web + API – Render
+1. [render.com](https://render.com) → New → **Web Service** → เลือก repo นี้ (Root Directory เว้นว่าง)
+2. Build Command: `npm run build` · Start Command: `npm start` · Plan: Free
+3. Environment Variables: `DATABASE_URL` (จากข้อ 1), `JWT_SECRET` (ข้อความสุ่มยาว ๆ), `NODE_ENV=production`, `NODE_VERSION=22`
+4. ทุกครั้งที่ push ขึ้น `main` Render จะ deploy ใหม่อัตโนมัติ – build จะ build หน้าเว็บ, รัน migration และ seed ข้อมูลตัวอย่างให้เอง (seed ใช้ upsert รันซ้ำได้)
+
+> แพ็กเกจฟรี: Render หลับเมื่อไม่มีคนใช้ 15 นาที (เปิดครั้งแรกรอ ~30–50 วิ) · Supabase จะ pause ถ้าไม่มีการใช้งาน 7 วัน – เข้า dashboard กด Restore ก่อนเดโม
+> Tables อยู่ใน schema `public` แต่เปิด Row Level Security ไว้ และไม่ได้ให้สิทธิ์ role `anon`/`authenticated` จึงอ่านผ่าน Supabase REST API ไม่ได้
 
 ## Team Workflow (Git)
 

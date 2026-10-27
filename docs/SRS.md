@@ -106,7 +106,7 @@
 | NFR-05 | Usability | UI แบบ Responsive รองรับหน้าจอตั้งแต่ 360px (มือถือ) ถึงเดสก์ท็อป |
 | NFR-06 | Usability | แสดงข้อความ error ที่เข้าใจง่ายเมื่อกรอกข้อมูลผิดหรือจองไม่สำเร็จ |
 | NFR-07 | Performance | หน้าเว็บหลักโหลดเสร็จภายใน 3 วินาทีบนอินเทอร์เน็ตทั่วไป, API ตอบภายใน 1 วินาที |
-| NFR-08 | Availability | Deploy บน Vercel (frontend) + Render (backend) + Neon (database) ใช้งานได้ 24 ชั่วโมงผ่าน URL สาธารณะ |
+| NFR-08 | Availability | Deploy บน Render (เว็บ + API) + Supabase (database) ใช้งานได้ 24 ชั่วโมงผ่าน URL สาธารณะ |
 | NFR-09 | Maintainability | โค้ดอยู่บน GitHub ใช้ branch / pull request / issue, แยก frontend (client) และ backend (server) ชัดเจน |
 | NFR-11 | Security | ใช้ Helmet ตั้ง HTTP security headers และจำกัดขนาด request body |
 | NFR-10 | Data Integrity | ใช้ foreign key และ unique constraint (email, ชื่อห้อง) ในฐานข้อมูล |
@@ -290,18 +290,14 @@ Index: `(roomId, startTime, endTime)` เพื่อให้ตรวจกา
 
 ```mermaid
 flowchart LR
-  B[Browser] -- HTTPS --> V
-  subgraph V[Vercel - Frontend]
-    R[React + Vite SPA<br/>React Router + Tailwind]
-    X[Rewrite /api/*]
-  end
-  X -- HTTPS / JSON --> E
-  subgraph E[Render - Backend]
-    A[Node.js + Express REST API<br/>Helmet, cookie-parser]
+  B[Browser] -- HTTPS --> E
+  subgraph E[Render web service - huddle-murn.onrender.com]
+    R[React + Vite build<br/>served as static files]
+    A[Node.js + Express REST API /api/*<br/>Helmet, cookie-parser]
     M[Middleware<br/>requireUser / requireAdmin<br/>ตรวจ JWT cookie]
     Z[Zod validation<br/>+ กฎการจอง]
   end
-  E -- Prisma ORM --> D[(PostgreSQL<br/>Neon)]
+  E -- Prisma ORM<br/>session pooler --> D[(PostgreSQL<br/>Supabase)]
 ```
 
 | Layer | Technology |
