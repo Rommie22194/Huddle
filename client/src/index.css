@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+/* Theme: warm paper background, ink text, one deep-green accent */
+@theme {
+  --font-sans: "IBM Plex Sans", "IBM Plex Sans Thai", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  --color-brand-50: #eef5f0;
+  --color-brand-100: #d5e8dc;
+  --color-brand-200: #acd0b9;
+  --color-brand-500: #3f8a5f;
+  --color-brand-600: #2d6f4b;
+  --color-brand-700: #22573a;
+  --color-brand-800: #1a432d;
+
+  --color-paper: #f5f4ef;
+}
+
+body {
+  background: var(--color-paper);
+  color: #1c1917;
+}
+
+@utility card {
+  @apply rounded-lg border border-stone-200 bg-white;
+}
+@utility input {
+  @apply w-full rounded-md border border-stone-300 bg-white px-3 py-2 text-sm outline-none transition-colors focus:border-brand-600 focus:ring-2 focus:ring-brand-100;
+}
+@utility label {
+  @apply mb-1 block text-sm font-medium text-stone-700;
+}
+@utility btn {
+  @apply inline-flex cursor-pointer items-center justify-center gap-2 rounded-md px-3.5 py-2 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-60;
+}
+@utility btn-primary {
+  @apply btn bg-brand-700 text-white hover:bg-brand-800;
+}
+@utility btn-secondary {
+  @apply btn border border-stone-300 bg-white text-stone-700 hover:bg-stone-50;
+}
+@utility btn-danger {
+  @apply btn border border-red-200 bg-white text-red-700 hover:bg-red-50;
+}
+@utility badge {
+  @apply inline-flex items-center gap-1.5 rounded px-2 py-0.5 text-xs font-medium;
+}
