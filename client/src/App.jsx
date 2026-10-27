@@ -7,6 +7,8 @@ import Register from "./pages/Register";
 import Rooms from "./pages/Rooms";
 import RoomDetail from "./pages/RoomDetail";
 import MyBookings from "./pages/MyBookings";
+import AdminDashboard from "./pages/AdminDashboard";
+import ManageRooms from "./pages/ManageRooms";
 import Schedule from "./pages/Schedule";
 import Profile from "./pages/Profile";
 
@@ -26,6 +28,11 @@ export default function App() {
             <Route path="/bookings" element={<MyBookings />} />
             <Route path="/schedule" element={<Schedule />} />
             <Route path="/profile" element={<Profile />} />
+          </Route>
+
+          <Route element={<ProtectedRoute adminOnly />}>
+            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/admin/rooms" element={<ManageRooms />} />
           </Route>
 
           <Route
