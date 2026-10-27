@@ -1,0 +1,64 @@
+// Meeting Room Booking System - Database Schema
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum BookingStatus {
+  CONFIRMED
+  CANCELLED
+}
+
+model User {
+  id           String    @id @default(cuid())
+  name         String
+  email        String    @unique
+  passwordHash String
+  department   String?
+  role         Role      @default(USER)
+  createdAt    DateTime  @default(now())
+  bookings     Booking[]
+}
+
+model Room {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  location    String
+  capacity    Int
+  equipment   String[]
+  description String?
+  imageUrl    String?
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  bookings    Booking[]
+}
+
+model Booking {
+  id          String        @id @default(cuid())
+  title       String
+  description String?
+  attendees   Int           @default(1)
+  startTime   DateTime
+  endTime     DateTime
+  status      BookingStatus @default(CONFIRMED)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  roomId String
+  room   Room   @relation(fields: [roomId], references: [id], onDelete: Cascade)
+
+  @@index([roomId, startTime, endTime])
+  @@index([userId])
+}
