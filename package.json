@@ -1,0 +1,12 @@
+{
+  "name": "huddle",
+  "private": true,
+  "description": "Huddle – meeting room booking system (React client + Express API)",
+  "scripts": {
+    "build": "npm ci --include=dev --prefix client && npm run build --prefix client && npm ci --include=dev --prefix server && npm run build --prefix server && npm run db:seed --prefix server",
+    "start": "npm start --prefix server"
+  },
+  "engines": {
+    "node": ">=20.6"
+  }
+}
