@@ -52,6 +52,18 @@ export const fmtTime = (d) => new Date(d).toLocaleTimeString("en-GB", { hour: "2
 export const overlaps = (bookings, start, end) =>
   bookings.some((b) => new Date(b.startTime) < end && new Date(b.endTime) > start);
 
+/**
+ * Rooms that are free for [start, end) and fit `attendees`, smallest suitable room first.
+ * rooms = response of /api/rooms/schedule (active rooms with that day's confirmed bookings).
+ * excludeRoomId = the room that is taken, excludeBookingId = the booking being edited (not a conflict with itself).
+ */
+export function freeRooms(rooms, { start, end, attendees, excludeRoomId, excludeBookingId }) {
+  return rooms
+    .filter((r) => r.id !== excludeRoomId && r.capacity >= attendees)
+    .filter((r) => !overlaps(r.bookings.filter((b) => b.id !== excludeBookingId), start, end))
+    .sort((a, b) => a.capacity - b.capacity || a.name.localeCompare(b.name));
+}
+
 /** Short status text for a room right now, based on today's bookings */
 export function roomNow(bookings, now = new Date()) {
   const current = bookings.find((b) => new Date(b.startTime) <= now && new Date(b.endTime) > now);

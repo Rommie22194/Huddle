@@ -41,6 +41,7 @@
 17. Export bookings to CSV (admin)
 18. Bug: schedule board columns have uneven widths (fix: `table-fixed`)
 19. Bug: mobile menu does not close after navigation  ← ตัวอย่าง bug จริงที่เจอระหว่างพัฒนา
+20. Suggest other free rooms when the selected time is taken
 
 ## ขั้นตอน Git ต่อ 1 issue
 
@@ -74,7 +75,7 @@ git push -u origin feature/bookings-api
 | 0–2 | ชื่อโครงงาน, สมาชิก, ปัญหา (จองซ้อน/ไม่รู้ห้องว่าง), กลุ่มเป้าหมาย | C | สไลด์ + หน้า Landing |
 | 2–6 | ฟีเจอร์หลัก, Use case, System flow, Architecture | C | Diagram จาก SRS + Figma |
 | 6–9 | Stack: React + Vite, Tailwind, Node.js + Express, Prisma, PostgreSQL, JWT, Zod, Render + Supabase + เหตุผล | A | ตาราง Tech Stack + ER Diagram |
-| 9–15 | Demo บนเว็บจริง: สมัคร → Schedule board คลิกช่องว่าง → จอง → ลองจองทับ (error 409) → แก้ไข → ยกเลิก → Profile เปลี่ยนรหัสผ่าน → login admin → สถิติ → Export CSV เปิดใน Excel → เพิ่มห้อง | B | เปิด DevTools > Network ให้เห็น request/response JSON |
+| 9–15 | Demo บนเว็บจริง: สมัคร → Schedule board คลิกช่องว่าง → จอง → ลองจองทับ (error 409) → กดห้องที่ระบบแนะนำ → แก้ไข → ยกเลิก → Profile เปลี่ยนรหัสผ่าน → login admin → สถิติ → Export CSV เปิดใน Excel → เพิ่มห้อง | B | เปิด DevTools > Network ให้เห็น request/response JSON |
 | 15–17 | ปัญหาที่เจอ (ดูหัวข้อด้านล่าง) | A | โค้ดส่วนที่แก้ |
 | 17–19 | สิ่งที่ได้เรียนรู้ + ต่อยอด | ทุกคน | |
 
