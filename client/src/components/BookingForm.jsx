@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { api, combine } from "../lib/api";
+import AlternativeRooms from "./AlternativeRooms";
 import { Alert, Field } from "./ui";
 
 /**
@@ -7,17 +8,32 @@ import { Alert, Field } from "./ui";
  * initial = { roomId, title, description, attendees, date: "YYYY-MM-DD", start: "HH:mm", end: "HH:mm" }
  * bookingId -> edit mode, rooms -> show a room dropdown
  * warnIf(start, end) -> optional message shown live under the time fields
+ * onPickRoom(room, values) -> called when the user picks a suggested free room
+ *   (default, used in the edit modal: just switch the room in this form)
  */
-export default function BookingForm({ initial, bookingId, rooms, maxCapacity, warnIf, onSaved, onCancel }) {
+export default function BookingForm({ initial, bookingId, rooms, maxCapacity, warnIf, onPickRoom, onSaved, onCancel }) {
   const [v, setV] = useState(initial);
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
+  const [taken, setTaken] = useState(false); // server answered 409 for the current values
 
-  const set = (k) => (e) => setV({ ...v, [k]: k === "attendees" ? Number(e.target.value) : e.target.value });
+  const set = (k) => (e) => {
+    setTaken(false);
+    setV({ ...v, [k]: k === "attendees" ? Number(e.target.value) : e.target.value });
+  };
 
   const startTime = combine(v.date, v.start);
   const endTime = combine(v.date, v.end);
-  const warning = warnIf && v.date && v.start && v.end ? warnIf(startTime, endTime) : null;
+  const validRange = v.date && v.start && v.end && !isNaN(startTime) && endTime > startTime;
+  const warning = warnIf && validRange ? warnIf(startTime, endTime) : null;
+  const showAlternatives = validRange && (Boolean(warning) || taken);
+
+  function pickRoom(room) {
+    setError("");
+    setTaken(false);
+    if (onPickRoom) onPickRoom(room, v);
+    else setV({ ...v, roomId: room.id });
+  }
 
   async function onSubmit(e) {
     e.preventDefault();
@@ -42,6 +58,7 @@ export default function BookingForm({ initial, bookingId, rooms, maxCapacity, wa
       onSaved(saved);
     } catch (err) {
       setError(err.message);
+      if (err.status === 409) setTaken(true);
     } finally {
       setSaving(false);
     }
@@ -80,6 +97,17 @@ export default function BookingForm({ initial, bookingId, rooms, maxCapacity, wa
         </Field>
       </div>
       {warning && <p className="-mt-2 text-xs text-amber-700">{warning}</p>}
+      {showAlternatives && (
+        <AlternativeRooms
+          date={v.date}
+          start={startTime}
+          end={endTime}
+          attendees={Math.max(1, v.attendees || 1)}
+          roomId={v.roomId}
+          bookingId={bookingId}
+          onPick={pickRoom}
+        />
+      )}
 
       <Field label="People" htmlFor="attendees" hint={capacity ? `(room fits ${capacity})` : ""}>
         <input id="attendees" type="number" min={1} max={capacity} className="input" value={v.attendees} onChange={set("attendees")} required />

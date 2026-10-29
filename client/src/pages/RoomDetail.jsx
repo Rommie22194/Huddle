@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { api, combine, dayRangeQuery, fmtDate, fmtTime, minutesLabel, overlaps, toDateInput } from "../lib/api";
 import BookingForm from "../components/BookingForm";
 import { Alert } from "../components/ui";
@@ -12,16 +12,24 @@ const plusHour = (t) => {
   return minutesLabel(Math.min(h * 60 + m + 60, 23 * 60 + 45));
 };
 
-export default function RoomDetail() {
+// Remount when the room changes (e.g. switching to a suggested free room) so all state starts fresh
+export default function RoomDetailPage() {
   const { id } = useParams();
+  return <RoomDetail key={id} id={id} />;
+}
+
+function RoomDetail({ id }) {
   const navigate = useNavigate();
   const [params] = useSearchParams();
-  // ?date=&start= come from the Schedule board
+  // Title / people / notes typed in another room's form, carried over when switching room
+  const draft = useLocation().state?.draft;
+  // ?date=&start= come from the Schedule board, &end= from a suggested room
   const [date, setDate] = useState(params.get("date") || toDateInput(new Date()));
   const startParam = params.get("start");
+  const endParam = params.get("end");
   const [slot, setSlot] = useState({
     start: startParam || "09:00",
-    end: startParam ? plusHour(startParam) : "10:00",
+    end: endParam || (startParam ? plusHour(startParam) : "10:00"),
     key: 0,
   });
   const [room, setRoom] = useState(null);
@@ -57,7 +65,7 @@ export default function RoomDetail() {
         {room.description && <p className="mt-2 max-w-2xl text-sm text-stone-500">{room.description}</p>}
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
+      <div className="grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
         <section>
           <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
             <h2 className="font-semibold">{fmtDate(combine(date, "12:00"))}</h2>
@@ -101,8 +109,21 @@ export default function RoomDetail() {
           <BookingForm
             key={`${slot.key}-${date}`}
             maxCapacity={room.capacity}
-            initial={{ roomId: room.id, title: "", description: "", attendees: 1, date, start: slot.start, end: slot.end }}
+            initial={{
+              roomId: room.id,
+              title: draft?.title ?? "",
+              description: draft?.description ?? "",
+              attendees: draft?.attendees ?? 1,
+              date,
+              start: slot.start,
+              end: slot.end,
+            }}
             warnIf={(s, e) => overlaps(room.bookings, s, e) && "That time overlaps an existing booking."}
+            onPickRoom={(r, v) =>
+              navigate(`/rooms/${r.id}?date=${v.date}&start=${v.start}&end=${v.end}`, {
+                state: { draft: { title: v.title, description: v.description, attendees: v.attendees } },
+              })
+            }
             onSaved={() => navigate("/bookings?created=1")}
           />
         </section>
