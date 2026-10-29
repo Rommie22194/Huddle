@@ -7,7 +7,7 @@
 | **Live Demo** | https://huddle-murn.onrender.com |
 | **API health** | https://huddle-murn.onrender.com/api/health |
 | **GitHub** | https://github.com/Rommie22194/Huddle |
-| **Figma** | `<ลิงก์ Figma>` |
+| **Figma** | https://www.figma.com/design/unADRYtbjMj8OA4E6QCltB/Huddle?node-id=0-1&t=j6qJczTibNUKrbmK-1 |
 | **Video** | `<ลิงก์ YouTube Unlisted>` |
 
 ## Test Accounts
