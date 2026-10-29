@@ -65,7 +65,7 @@ function RoomDetail({ id }) {
         {room.description && <p className="mt-2 max-w-2xl text-sm text-stone-500">{room.description}</p>}
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
+      <div className="grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
         <section>
           <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
             <h2 className="font-semibold">{fmtDate(combine(date, "12:00"))}</h2>
