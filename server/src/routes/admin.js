@@ -24,9 +24,14 @@ router.get("/stats", async (req, res) => {
   res.json({ rooms, users, upcoming, cancelled, usage });
 });
 
-/** Quote a value for CSV (handles commas, quotes and new lines) */
+/**
+ * Quote a value for CSV (handles commas, quotes and new lines).
+ * Text typed by users (title, notes, name...) that starts with = + - @ tab or CR would be run
+ * as a formula when the file is opened in Excel (CSV injection), so prefix it with ' to keep it plain text.
+ */
 const csvCell = (v) => {
-  const s = v == null ? "" : String(v);
+  let s = v == null ? "" : String(v);
+  if (typeof v === "string" && /^[=+\-@\t\r]/.test(s)) s = `'${s}`;
   return /[",\n\r]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
 };
 
