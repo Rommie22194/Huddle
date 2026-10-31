@@ -3,10 +3,20 @@ import { api, fmtTime, toDateInput, toTimeInput } from "../lib/api";
 import BookingForm from "./BookingForm";
 import { Alert, Empty, Modal, StatusBadge } from "./ui";
 
-/** List of bookings with Edit / Cancel actions. showUser = admin view */
+/** Same weekday and time as the original, moved forward week by week until it is in the future */
+function nextOccurrence(startTime) {
+  const d = new Date(startTime);
+  const now = new Date();
+  while (d <= now) d.setDate(d.getDate() + 7);
+  return d;
+}
+
+/** List of bookings with Edit / Cancel / Book again actions. showUser = admin view */
 export default function BookingList({ bookings, rooms, showUser, onChange }) {
   const [editing, setEditing] = useState(null);
+  const [rebooking, setRebooking] = useState(null);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   async function cancel(b) {
     if (!confirm(`Cancel "${b.title}"?`)) return;
@@ -24,9 +34,11 @@ export default function BookingList({ bookings, rooms, showUser, onChange }) {
   return (
     <div>
       {error && <div className="mb-3"><Alert>{error}</Alert></div>}
+      {success && <div className="mb-3"><Alert type="success">{success}</Alert></div>}
       <ul className="card divide-y divide-stone-100">
         {bookings.map((b) => {
           const editable = b.status === "CONFIRMED" && new Date(b.startTime) > new Date();
+          const canRebook = !showUser && rooms?.length > 0;
           const start = new Date(b.startTime);
           return (
             <li key={b.id} className="flex flex-col gap-3 px-4 py-3.5 sm:flex-row sm:items-center">
@@ -55,10 +67,22 @@ export default function BookingList({ bookings, rooms, showUser, onChange }) {
                   )}
                 </div>
               </div>
-              {editable && (
+              {(editable || canRebook) && (
                 <div className="flex gap-2 sm:shrink-0">
-                  <button onClick={() => setEditing(b)} className="btn-secondary flex-1 py-1.5 sm:flex-none">Edit</button>
-                  <button onClick={() => cancel(b)} className="btn-danger flex-1 py-1.5 sm:flex-none">Cancel</button>
+                  {canRebook && (
+                    <button
+                      onClick={() => { setSuccess(""); setRebooking(b); }}
+                      className="btn-secondary flex-1 py-1.5 sm:flex-none"
+                    >
+                      Book again
+                    </button>
+                  )}
+                  {editable && (
+                    <>
+                      <button onClick={() => setEditing(b)} className="btn-secondary flex-1 py-1.5 sm:flex-none">Edit</button>
+                      <button onClick={() => cancel(b)} className="btn-danger flex-1 py-1.5 sm:flex-none">Cancel</button>
+                    </>
+                  )}
                 </div>
               )}
             </li>
@@ -88,6 +112,40 @@ export default function BookingList({ bookings, rooms, showUser, onChange }) {
           />
         </Modal>
       )}
+
+      {rebooking && (() => {
+        const start = nextOccurrence(rebooking.startTime);
+        const end = new Date(start.getTime() + (new Date(rebooking.endTime) - new Date(rebooking.startTime)));
+        // The original room may have been closed since; fall back to the first bookable room
+        const roomId = rooms.some((r) => r.id === rebooking.roomId) ? rebooking.roomId : rooms[0].id;
+        return (
+          <Modal title="Book again" onClose={() => setRebooking(null)}>
+            {roomId !== rebooking.roomId && (
+              <div className="mb-4">
+                <Alert>{rebooking.room?.name ?? "The original room"} is no longer bookable. Pick another room.</Alert>
+              </div>
+            )}
+            <BookingForm
+              rooms={rooms}
+              initial={{
+                roomId,
+                title: rebooking.title,
+                description: rebooking.description ?? "",
+                attendees: rebooking.attendees,
+                date: toDateInput(start),
+                start: toTimeInput(start),
+                end: toTimeInput(end),
+              }}
+              onCancel={() => setRebooking(null)}
+              onSaved={(saved) => {
+                setRebooking(null);
+                setSuccess(`Booked "${saved.title}" for ${new Date(saved.startTime).toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" })}. It's in your Upcoming tab.`);
+                onChange();
+              }}
+            />
+          </Modal>
+        );
+      })()}
     </div>
   );
 }
