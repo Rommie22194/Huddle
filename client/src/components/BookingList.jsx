@@ -3,11 +3,12 @@ import { api, fmtTime, toDateInput, toTimeInput } from "../lib/api";
 import BookingForm from "./BookingForm";
 import { Alert, Empty, Modal, StatusBadge } from "./ui";
 
-/** Same weekday and time as the original, moved forward week by week until it is in the future */
+/** Same weekday and time as the original: at least one week later, and moved forward until it is in the future */
 function nextOccurrence(startTime) {
   const d = new Date(startTime);
   const now = new Date();
-  while (d <= now) d.setDate(d.getDate() + 7);
+  do d.setDate(d.getDate() + 7);
+  while (d <= now);
   return d;
 }
 
@@ -72,7 +73,7 @@ export default function BookingList({ bookings, rooms, showUser, onChange }) {
                   {canRebook && (
                     <button
                       onClick={() => { setSuccess(""); setRebooking(b); }}
-                      className="btn-secondary flex-1 py-1.5 sm:flex-none"
+                      className="btn-secondary flex-1 py-1.5 whitespace-nowrap sm:flex-none"
                     >
                       Book again
                     </button>
