@@ -1,21 +1,20 @@
 # แผนงาน 1 สัปดาห์ + แบ่งงาน + โครงคลิป
 
-## แบ่งงาน (3 คน — ถ้า 2 คนให้รวม B กับ C)
+## แบ่งงาน (2 คน)
 
 | สมาชิก | รับผิดชอบ | ไฟล์หลัก |
 |---|---|---|
 | **A – Backend / DB** | Express server, Prisma schema, seed, Auth API, Booking API + กฎจองซ้อน, Deploy Render + Supabase | `server/` ทั้งหมด |
-| **B – Frontend User** | Vite setup, Navbar, AuthProvider, Login/Register, Rooms, Room detail + BookingForm, My Bookings | `client/src/components/`, `client/src/context/`, `client/src/pages/` (ยกเว้น Admin) |
-| **C – Admin + เอกสาร** | Admin Dashboard, Manage Rooms, Penpot prototype, SRS, ตัดต่อคลิป | `client/src/pages/AdminDashboard.jsx`, `ManageRooms.jsx`, `docs/` |
+| **B – Frontend + เอกสาร** | Vite setup, Navbar, AuthProvider, Login/Register, Rooms, Room detail + BookingForm, My Bookings, Admin Dashboard, Manage Rooms, Penpot prototype, SRS, ตัดต่อคลิป | `client/src/`, `docs/` |
 
 ## Timeline
 
 | วัน | งาน |
 |---|---|
 | 1 | สร้าง GitHub repo + เพิ่มเพื่อนเป็น collaborator, เปิด Issues ตามตารางด้านล่าง, เขียน SRS ร่าง, เริ่ม Penpot |
-| 2 | A: schema + auth API · B: layout/Navbar/Login · C: Penpot ให้ครบทุกหน้า + ลิงก์ prototype flow |
-| 3 | A: rooms + bookings API · B: Rooms + Room detail · C: Admin pages |
-| 4 | B: My Bookings · A: deploy ขึ้น Render + Supabase · C: SRS ฉบับสมบูรณ์ |
+| 2 | A: schema + auth API · B: layout/Navbar/Login + Penpot ให้ครบทุกหน้า + ลิงก์ prototype flow |
+| 3 | A: rooms + bookings API · B: Rooms + Room detail + Admin pages |
+| 4 | B: My Bookings + SRS ฉบับสมบูรณ์ · A: deploy ขึ้น Render + Supabase |
 | 5 | ทดสอบร่วมกัน แก้บั๊ก (เปิด Issue ทุกบั๊กที่เจอ → PR แก้) ทดสอบบนมือถือ |
 | 6 | อัดคลิป (เปิดกล้องทุกคน) |
 | 7 | ตัดต่อ อัป YouTube (Unlisted) อัปเดต README ด้วยลิงก์ทั้งหมด ส่งงาน |
@@ -72,12 +71,12 @@ git push -u origin feature/bookings-api
 
 | นาที | เนื้อหา | ใครพูด | สิ่งที่แสดง |
 |---|---|---|---|
-| 0–2 | ชื่อโครงงาน, สมาชิก, ปัญหา (จองซ้อน/ไม่รู้ห้องว่าง), กลุ่มเป้าหมาย | C | สไลด์ + หน้า Landing |
-| 2–6 | ฟีเจอร์หลัก, Use case, System flow, Architecture | C | Diagram จาก SRS + Penpot |
-| 6–9 | Stack: React + Vite, Tailwind, Node.js + Express, Prisma, PostgreSQL, JWT, Zod, Render + Supabase + เหตุผล | A | ตาราง Tech Stack + ER Diagram |
-| 9–15 | Demo บนเว็บจริง: สมัคร → Schedule board คลิกช่องว่าง → จอง → ลองจองทับ (error 409) → กดห้องที่ระบบแนะนำ → แก้ไข → ยกเลิก → Profile เปลี่ยนรหัสผ่าน → login admin → สถิติ → Export CSV เปิดใน Excel → เพิ่มห้อง | B | เปิด DevTools > Network ให้เห็น request/response JSON |
-| 15–17 | ปัญหาที่เจอ (ดูหัวข้อด้านล่าง) | A | โค้ดส่วนที่แก้ |
-| 17–19 | สิ่งที่ได้เรียนรู้ + ต่อยอด | ทุกคน | |
+| 0–2 | ชื่อโครงงาน, สมาชิก, ปัญหา (จองซ้อน/ไม่รู้ห้องว่าง), กลุ่มเป้าหมาย | คนที่ 1 | สไลด์ + หน้า Landing |
+| 2–6 | ฟีเจอร์หลัก, Use case, System flow, Architecture | คนที่ 1 | Diagram จาก SRS + Penpot |
+| 6–9 | Stack: React + Vite, Tailwind, Node.js + Express, Prisma, PostgreSQL, JWT, Zod, Render + Supabase + เหตุผล | คนที่ 2 | ตาราง Tech Stack + ER Diagram |
+| 9–15 | Demo บนเว็บจริง: สมัคร → Schedule board คลิกช่องว่าง → จอง → ลองจองทับ (error 409) → กดห้องที่ระบบแนะนำ → แก้ไข → ยกเลิก → Profile เปลี่ยนรหัสผ่าน → login admin → สถิติ → Export CSV เปิดใน Excel → เพิ่มห้อง | คนที่ 2 | เปิด DevTools > Network ให้เห็น request/response JSON |
+| 15–17 | ปัญหาที่เจอ (ดูหัวข้อด้านล่าง) | คนที่ 1 | โค้ดส่วนที่แก้ |
+| 17–19 | สิ่งที่ได้เรียนรู้ + ต่อยอด | ทั้งคู่ (ต่อยอด: คนที่ 1) | |
 
 ### ความท้าทาย & วิธีแก้ (ใช้พูดในคลิปได้)
 - **ป้องกันการจองซ้อน** — ใช้เงื่อนไข `start < newEnd AND end > newStart` ตรวจที่ server ทุกครั้ง (ไม่เชื่อ client) และไม่นับการจองของตัวเองตอนแก้ไข
