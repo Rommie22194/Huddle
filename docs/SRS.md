@@ -333,13 +333,16 @@ sequenceDiagram
 
 ---
 
-## 7. UI Screens (อ้างอิง Figma Prototype)
+## 7. UI Screens (อ้างอิง Penpot Prototype)
+
+ลิงก์ prototype: https://design.penpot.app/?screen=viewer&file-id=5009c98b-0fb2-816e-8008-d9206c560488&page-id=5009c98b-0fb2-816e-8008-d9206c560489&section=interactions&frame-id=39eed252-2d23-8090-8008-d922593810a5&index=0&share-id=d693279c-8a27-4d2b-99d9-7b98a0723212
+
 1. Landing page
 2. Login / Register
 3. Schedule board (ทุกห้อง × ช่องเวลา 30 นาที)
 4. Rooms (ค้นหา + การ์ดห้อง + สถานะตอนนี้)
-5. Room detail (ตารางรายชั่วโมง + ฟอร์มจอง)
-6. My bookings (แท็บ + Edit modal + Cancel)
+5. Room detail (ตารางรายชั่วโมง + ฟอร์มจอง + แนะนำห้องอื่นที่ว่างเมื่อเวลาทับกัน)
+6. My bookings (แท็บ + Edit modal + Book again + Cancel)
 7. Profile (แก้ข้อมูล + เปลี่ยนรหัสผ่าน)
 8. Admin (สถิติ + การจองทั้งหมด + Export CSV)
 9. Edit rooms (ตาราง + ฟอร์มเพิ่ม/แก้ไข)

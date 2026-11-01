@@ -12,8 +12,8 @@
 
 | วัน | งาน |
 |---|---|
-| 1 | สร้าง GitHub repo + เพิ่มเพื่อนเป็น collaborator, เปิด Issues ตามตารางด้านล่าง, เขียน SRS ร่าง, เริ่ม Figma |
-| 2 | A: schema + auth API · B: layout/Navbar/Login · C: Figma ให้ครบทุกหน้า + ลิงก์ prototype flow |
+| 1 | สร้าง GitHub repo + เพิ่มเพื่อนเป็น collaborator, เปิด Issues ตามตารางด้านล่าง, เขียน SRS ร่าง, เริ่ม Penpot |
+| 2 | A: schema + auth API · B: layout/Navbar/Login · C: Penpot ให้ครบทุกหน้า + ลิงก์ prototype flow |
 | 3 | A: rooms + bookings API · B: Rooms + Room detail · C: Admin pages |
 | 4 | B: My Bookings · A: deploy ขึ้น Render + Supabase · C: SRS ฉบับสมบูรณ์ |
 | 5 | ทดสอบร่วมกัน แก้บั๊ก (เปิด Issue ทุกบั๊กที่เจอ → PR แก้) ทดสอบบนมือถือ |
@@ -73,7 +73,7 @@ git push -u origin feature/bookings-api
 | นาที | เนื้อหา | ใครพูด | สิ่งที่แสดง |
 |---|---|---|---|
 | 0–2 | ชื่อโครงงาน, สมาชิก, ปัญหา (จองซ้อน/ไม่รู้ห้องว่าง), กลุ่มเป้าหมาย | C | สไลด์ + หน้า Landing |
-| 2–6 | ฟีเจอร์หลัก, Use case, System flow, Architecture | C | Diagram จาก SRS + Figma |
+| 2–6 | ฟีเจอร์หลัก, Use case, System flow, Architecture | C | Diagram จาก SRS + Penpot |
 | 6–9 | Stack: React + Vite, Tailwind, Node.js + Express, Prisma, PostgreSQL, JWT, Zod, Render + Supabase + เหตุผล | A | ตาราง Tech Stack + ER Diagram |
 | 9–15 | Demo บนเว็บจริง: สมัคร → Schedule board คลิกช่องว่าง → จอง → ลองจองทับ (error 409) → กดห้องที่ระบบแนะนำ → แก้ไข → ยกเลิก → Profile เปลี่ยนรหัสผ่าน → login admin → สถิติ → Export CSV เปิดใน Excel → เพิ่มห้อง | B | เปิด DevTools > Network ให้เห็น request/response JSON |
 | 15–17 | ปัญหาที่เจอ (ดูหัวข้อด้านล่าง) | A | โค้ดส่วนที่แก้ |
