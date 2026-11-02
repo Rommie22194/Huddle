@@ -8,7 +8,7 @@
 | **API health** | https://huddle-murn.onrender.com/api/health |
 | **GitHub** | https://github.com/Rommie22194/Huddle |
 | **UI Prototype (Penpot)** | https://design.penpot.app/?screen=viewer&file-id=5009c98b-0fb2-816e-8008-d9206c560488&page-id=5009c98b-0fb2-816e-8008-d9206c560489&section=interactions&frame-id=39eed252-2d23-8090-8008-d922593810a5&index=0&share-id=d693279c-8a27-4d2b-99d9-7b98a0723212 |
-| **Video** | `<ลิงก์ YouTube Unlisted>` |
+| **Video** | https://drive.google.com/file/d/1Dfy3vVLBU8fbI9u5BEGeePQWZGEpTRh5/view?usp=sharing |
 
 ## Test Accounts
 

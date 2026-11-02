@@ -73,10 +73,10 @@ git push -u origin feature/bookings-api
 |---|---|---|---|
 | 0–2 | ชื่อโครงงาน, สมาชิก, ปัญหา (จองซ้อน/ไม่รู้ห้องว่าง), กลุ่มเป้าหมาย | คนที่ 1 | สไลด์ + หน้า Landing |
 | 2–6 | ฟีเจอร์หลัก, Use case, System flow, Architecture | คนที่ 1 | Diagram จาก SRS + Penpot |
-| 6–9 | Stack: React + Vite, Tailwind, Node.js + Express, Prisma, PostgreSQL, JWT, Zod, Render + Supabase + เหตุผล | คนที่ 2 | ตาราง Tech Stack + ER Diagram |
+| 6–9 | Stack: React + Vite, Tailwind, Node.js + Express, Prisma, PostgreSQL, JWT, Zod, Render + Supabase + เหตุผล | คนที่ 1 | ตาราง Tech Stack + ER Diagram |
 | 9–15 | Demo บนเว็บจริง: สมัคร → Schedule board คลิกช่องว่าง → จอง → ลองจองทับ (error 409) → กดห้องที่ระบบแนะนำ → แก้ไข → ยกเลิก → Profile เปลี่ยนรหัสผ่าน → login admin → สถิติ → Export CSV เปิดใน Excel → เพิ่มห้อง | คนที่ 2 | เปิด DevTools > Network ให้เห็น request/response JSON |
-| 15–17 | ปัญหาที่เจอ (ดูหัวข้อด้านล่าง) | คนที่ 1 | โค้ดส่วนที่แก้ |
-| 17–19 | สิ่งที่ได้เรียนรู้ + ต่อยอด | ทั้งคู่ (ต่อยอด: คนที่ 1) | |
+| 15–17 | ปัญหาที่เจอ (ดูหัวข้อด้านล่าง) | คนที่ 2 | โค้ดส่วนที่แก้ |
+| 17–19 | สิ่งที่ได้เรียนรู้ + ต่อยอด | คนที่ 2 | |
 
 ### ความท้าทาย & วิธีแก้ (ใช้พูดในคลิปได้)
 - **ป้องกันการจองซ้อน** — ใช้เงื่อนไข `start < newEnd AND end > newStart` ตรวจที่ server ทุกครั้ง (ไม่เชื่อ client) และไม่นับการจองของตัวเองตอนแก้ไข
